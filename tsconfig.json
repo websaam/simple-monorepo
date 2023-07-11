@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "declaration": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/bar"
+    },
+    {
+      "path": "./packages/foo"
+    },
+    {
+      "path": "./packages/foo"
+    },
+    {
+      "path": "./packages/foo"
+    },
+    {
+      "path": "./packages/bar"
+    }
+  ]
+}
