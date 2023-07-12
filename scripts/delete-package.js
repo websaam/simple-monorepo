@@ -33,6 +33,12 @@ readline.question("Which package do you want to delete? ", (packageName) => {
       rootTsConfig.references = rootTsConfig.references.filter(
         (ref) => ref.path !== `./packages/${packageName}`
       );
+
+      // Remove the package from compilerOptions.paths
+      if (rootTsConfig.compilerOptions.paths) {
+        delete rootTsConfig.compilerOptions.paths[packageName];
+      }
+
       fs.writeFileSync(rootTsConfigPath, JSON.stringify(rootTsConfig, null, 2));
 
       console.log(`Removed package "${packageName}" from tsconfig.json`);

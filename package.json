@@ -8,6 +8,7 @@
     "build:umd": "node ./scripts/build-umd.js",
     "create:package": "node scripts/create-package.js",
     "delete:package": "node ./scripts/delete-package.js",
+    "check:packages": "node ./scripts/check-packages.js",
     "clean": "node ./scripts/clean.js"
   },
   "devDependencies": {

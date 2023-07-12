@@ -1,5 +1,14 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "foo": [
+        "./packages/foo/src/index"
+      ],
+      "bar": [
+        "./packages/bar/src/index"
+      ]
+    },
     "module": "commonjs",
     "target": "es5",
     "declaration": true,
@@ -15,15 +24,6 @@
     },
     {
       "path": "./packages/foo"
-    },
-    {
-      "path": "./packages/foo"
-    },
-    {
-      "path": "./packages/foo"
-    },
-    {
-      "path": "./packages/bar"
     }
   ]
 }

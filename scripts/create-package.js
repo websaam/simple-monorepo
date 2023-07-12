@@ -45,10 +45,12 @@ module.exports = {
 
   fs.writeFileSync(path.join(packagesDir, "webpack.config.js"), webpackConfig);
 
+  // The "composite" option enables project composition in TypeScript. It tells TypeScript to generate certain files in the output directory (outDir) that can be used to speed up subsequent builds and to enable tools to do more powerful project-wide checks and refactorings.
   const tsConfigJson = {
     extends: "../../tsconfig.json",
     compilerOptions: {
       outDir: "./dist/cjs",
+      composite: true,
     },
     include: ["src/**/*.ts"],
   };
@@ -65,6 +67,15 @@ module.exports = {
   const rootTsConfigPath = path.resolve(__dirname, "..", "tsconfig.json");
   const rootTsConfig = JSON.parse(fs.readFileSync(rootTsConfigPath, "utf8"));
   rootTsConfig.references.push({ path: `./packages/${packageName}` });
+
+  // Add the new package to compilerOptions.paths
+  if (!rootTsConfig.compilerOptions.paths) {
+    rootTsConfig.compilerOptions.paths = {};
+  }
+  rootTsConfig.compilerOptions.paths[packageName] = [
+    `./packages/${packageName}/src`,
+  ];
+
   fs.writeFileSync(rootTsConfigPath, JSON.stringify(rootTsConfig, null, 2));
 
   readline.close();
