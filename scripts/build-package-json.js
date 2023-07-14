@@ -19,10 +19,38 @@ packageDirs.forEach((dir) => {
     if (packageJson.dependencies[dep] === "*") {
       // Check if dep is another package in the monorepo
       const depPath = path.join(packagesDir, dep, "package.json");
+
       if (fs.existsSync(depPath)) {
         // Get actual version from dep's own package.json
         const depPackageJson = require(depPath);
         updatedDependencies[dep] = depPackageJson.version;
+      } else if (dep.includes("/")) {
+        // Check if dep has a namespace
+        const [namespace, packageName] = dep.split("/");
+        const namespaceDepPath = path.join(
+          packagesDir,
+          packageName,
+          "package.json"
+        );
+
+        if (fs.existsSync(namespaceDepPath)) {
+          // Get actual version from package.json without the namespace
+          const depPackageJson = require(namespaceDepPath);
+          updatedDependencies[dep] = depPackageJson.version;
+        } else {
+          // Get actual version from the root package.json
+          const rootPackageJson = require(path.join(
+            __dirname,
+            "..",
+            "package.json"
+          ));
+          const rootDependency = rootPackageJson.dependencies[namespace];
+          if (!rootDependency) {
+            console.error(`No matching version found for ${dep}`);
+            process.exit(1);
+          }
+          updatedDependencies[dep] = `${namespace}/${rootDependency}`;
+        }
       } else {
         // Get actual version from the root package.json
         const rootPackageJson = require(path.join(
