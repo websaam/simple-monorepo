@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "yarn build:cjs && yarn build:umd",
+    "build": "yarn build:cjs && yarn build:umd && yarn build:esm",
     "build:cjs": "tsc --build",
     "build:umd": "node ./scripts/build-umd.js",
+    "build:esm": "node ./scripts/build-esm.js",
+    "build:packageJson": "node ./scripts/build-package-json.js",
     "create:package": "node scripts/create-package.js",
     "delete:package": "node ./scripts/delete-package.js",
     "check:packages": "node ./scripts/check-packages.js",
@@ -14,8 +16,6 @@
   "devDependencies": {
     "esbuild": "^0.18.12",
     "ts-loader": "^9.4.4",
-    "typescript": "^4.0.0",
-    "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
+    "typescript": "^4.0.0"
   }
 }

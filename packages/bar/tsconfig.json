@@ -2,14 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist/cjs",
+    "declaration": true,
+    "declarationDir": "./dist/types",
     "composite": true
   },
-  "references": [
-    {
-      "path": "../foo"
-    }
-  ],
   "include": [
     "src/**/*.ts"
-  ]
+  ],
+  "references": []
 }

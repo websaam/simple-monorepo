@@ -14,8 +14,9 @@ readline.question("What is the name of the new package? ", (packageName) => {
     name: packageName,
     version: "1.0.0",
     main: "./dist/cjs/index.js",
-    types: "./dist/cjs/index.d.ts",
+    module: "./dist/esm/index.js",
     browser: "./dist/umd/index.js",
+    types: "./dist/types/index.d.ts",
     scripts: {
       build: "tsc",
     },
@@ -34,6 +35,8 @@ readline.question("What is the name of the new package? ", (packageName) => {
     extends: "../../tsconfig.json",
     compilerOptions: {
       outDir: "./dist/cjs",
+      declaration: true,
+      declarationDir: "./dist/types",
       composite: true,
     },
     include: ["src/**/*.ts"],

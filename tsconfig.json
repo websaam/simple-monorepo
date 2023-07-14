@@ -24,6 +24,12 @@
     },
     {
       "path": "./packages/bar"
+    },
+    {
+      "path": "./packages/foo"
+    },
+    {
+      "path": "./packages/bar"
     }
   ]
 }

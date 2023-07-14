@@ -1,7 +1,3 @@
-export const foo = () => "bar";
+import { bar } from "bar";
 
-foo();
-
-(async () => {
-  console.log("hello");
-})();
+console.log("bar", bar);
