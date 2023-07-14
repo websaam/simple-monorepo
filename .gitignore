@@ -4,6 +4,7 @@ node_modules
 
 # ignore all dist directories
 **/dist
+packages/*/dist/
 
 # Ignore .env files
 .env
