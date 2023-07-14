@@ -50,3 +50,46 @@ if (orphanedReferences.length > 0) {
     )}`
   );
 }
+
+/** ========== Check imports in each file from package, then update tsconfig.json  */
+const directories = fs.readdirSync(packagesDir);
+directories.forEach((packageDirName) => {
+  const packageDir = path.join(packagesDir, packageDirName);
+  const tsConfigPath = path.join(packageDir, "tsconfig.json");
+
+  let tsConfig;
+  try {
+    tsConfig = JSON.parse(fs.readFileSync(tsConfigPath, "utf8"));
+  } catch (e) {
+    console.error(
+      `Failed to read or parse tsconfig.json for ${packageDirName}`
+    );
+    process.exit(1);
+  }
+
+  tsConfig.references = [];
+
+  const packageFiles = fs.readdirSync(path.join(packageDir, "src"));
+
+  packageFiles.forEach((file) => {
+    const filePath = path.join(packageDir, "src", file);
+    const code = fs.readFileSync(filePath, "utf8");
+
+    const importRegex = /import\s+.*\s+from\s+['"](.*)['"]/g;
+    let match;
+    while ((match = importRegex.exec(code)) !== null) {
+      const importedPackageName = match[1];
+
+      if (directories.includes(importedPackageName)) {
+        const existingRefs = tsConfig.references.map((ref) => ref.path);
+        const relativePath = `../${importedPackageName}`;
+
+        if (!existingRefs.includes(relativePath)) {
+          tsConfig.references.push({ path: relativePath });
+        }
+      }
+    }
+  });
+
+  fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfig, null, 2));
+});

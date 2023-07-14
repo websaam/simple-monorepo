@@ -4,6 +4,11 @@
     "outDir": "./dist/cjs",
     "composite": true
   },
+  "references": [
+    {
+      "path": "../foo"
+    }
+  ],
   "include": [
     "src/**/*.ts"
   ]
