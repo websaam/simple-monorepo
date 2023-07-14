@@ -1,6 +1,6 @@
 {
   "name": "@websaam/foo",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/index.js",
   "browser": "./dist/umd/index.js",
