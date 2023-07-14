@@ -1,3 +1,11 @@
-import { bar } from "bar";
+import { bar } from "@websaam/bar";
 
-console.log("bar", bar);
+export const foo = async () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(bar);
+    }, 1000);
+  });
+};
+
+console.log("foo");

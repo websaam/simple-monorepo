@@ -1,4 +1,3 @@
-// check-packages.js
 const fs = require("fs");
 const path = require("path");
 
@@ -11,13 +10,24 @@ const packagesDir = path.resolve(__dirname, "..", "packages");
 const packageDirs = fs.readdirSync(packagesDir);
 
 // Check each package
-packageDirs.forEach((packageName) => {
+packageDirs.forEach((packageDir) => {
+  const packagePath = path.join(packagesDir, packageDir);
+  const packageJsonPath = path.join(packagePath, "package.json");
+
+  if (!fs.existsSync(packageJsonPath)) {
+    console.error(`Missing package.json for package "${packageDir}"`);
+    return;
+  }
+
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+  const packageName = packageJson.name;
+
   const packageExistsInPaths =
     rootTsConfig.compilerOptions.paths &&
     rootTsConfig.compilerOptions.paths[packageName];
 
   const packageExistsInReferences = rootTsConfig.references.some(
-    (ref) => ref.path === `./packages/${packageName}`
+    (ref) => ref.path === `./packages/${packageDir}`
   );
 
   if (!packageExistsInPaths || !packageExistsInReferences) {
@@ -27,31 +37,26 @@ packageDirs.forEach((packageName) => {
   }
 });
 
-// Check for orphaned packages in tsconfig.json
-const orphanedPaths = Object.keys(
-  rootTsConfig.compilerOptions.paths || {}
-).filter((path) => !packageDirs.includes(path));
-const orphanedReferences = rootTsConfig.references
-  .map((ref) => ref.path.replace("./packages/", ""))
-  .filter((path) => !packageDirs.includes(path));
+// Orphaned references check
+const orphanedReferences = rootTsConfig.references.filter(
+  (ref) => {
+    // Get the package directory name from the reference path
+    const refPackageDir = ref.path.replace("./packages/", "").split("/").pop();
 
-if (orphanedPaths.length > 0) {
-  console.error(
-    `The following packages are declared in compilerOptions.paths but do not exist: ${orphanedPaths.join(
-      ", "
-    )}`
-  );
-}
+    // Check if a directory with this name exists in the packages directory
+    return !packageDirs.includes(refPackageDir);
+  }
+);
 
 if (orphanedReferences.length > 0) {
   console.error(
-    `The following packages are declared in references but do not exist: ${orphanedReferences.join(
-      ", "
-    )}`
+    `The following packages are declared in references but do not exist: ${orphanedReferences
+      .map((ref) => ref.path.replace("./packages/", ""))
+      .join(", ")}`
   );
 }
 
-/** ========== Check imports in each file from package, then update tsconfig.json  */
+// Check imports and update tsconfig.json references
 const directories = fs.readdirSync(packagesDir);
 directories.forEach((packageDirName) => {
   const packageDir = path.join(packagesDir, packageDirName);
@@ -61,9 +66,7 @@ directories.forEach((packageDirName) => {
   try {
     tsConfig = JSON.parse(fs.readFileSync(tsConfigPath, "utf8"));
   } catch (e) {
-    console.error(
-      `Failed to read or parse tsconfig.json for ${packageDirName}`
-    );
+    console.error(`Failed to read or parse tsconfig.json for ${packageDirName}`);
     process.exit(1);
   }
 
@@ -80,9 +83,9 @@ directories.forEach((packageDirName) => {
     while ((match = importRegex.exec(code)) !== null) {
       const importedPackageName = match[1];
 
-      if (directories.includes(importedPackageName)) {
+      if (directories.includes(importedPackageName.split("/").pop())) {
         const existingRefs = tsConfig.references.map((ref) => ref.path);
-        const relativePath = `../${importedPackageName}`;
+        const relativePath = `../${importedPackageName.split("/").pop()}`;
 
         if (!existingRefs.includes(relativePath)) {
           tsConfig.references.push({ path: relativePath });

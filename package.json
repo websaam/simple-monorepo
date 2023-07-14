@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "yarn build:cjs && yarn build:umd && yarn build:esm",
+    "build": "yarn build:cjs && yarn build:umd && yarn build:esm && yarn build:packageJson",
     "build:cjs": "tsc --build",
     "build:umd": "node ./scripts/build-umd.js",
     "build:esm": "node ./scripts/build-esm.js",
     "build:packageJson": "node ./scripts/build-package-json.js",
+    "publish:package": "node ./scripts/publish-package.js",
     "create:package": "node scripts/create-package.js",
     "delete:package": "node ./scripts/delete-package.js",
     "check:packages": "node ./scripts/check-packages.js",
+    "bump": "node ./scripts/bump-version.js",
     "clean": "node ./scripts/clean.js"
   },
   "devDependencies": {

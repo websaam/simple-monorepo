@@ -6,10 +6,10 @@
     "declaration": true,
     "esModuleInterop": true,
     "paths": {
-      "foo": [
+      "@websaam/foo": [
         "./packages/foo/src"
       ],
-      "bar": [
+      "@websaam/bar": [
         "./packages/bar/src"
       ]
     }
@@ -19,12 +19,6 @@
   ],
   "files": [],
   "references": [
-    {
-      "path": "./packages/foo"
-    },
-    {
-      "path": "./packages/bar"
-    },
     {
       "path": "./packages/foo"
     },

@@ -1,13 +1,17 @@
 {
-  "name": "bar",
-  "version": "1.0.0",
-  "main": "./dist/cjs/index.js",
-  "types": "./dist/cjs/index.d.ts",
+  "name": "@websaam/bar",
+  "version": "0.0.1",
+  "main": "./dist/cjs/src/index.js",
+  "module": "./dist/esm/index.js",
   "browser": "./dist/umd/index.js",
+  "types": "./dist/types/src/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
   "devDependencies": {
     "typescript": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
