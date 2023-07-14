@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist/cjs"
+    "outDir": "./dist/cjs",
+    "composite": true
   },
-  "include": ["src/**/*.ts"],
-  "references": [{ "path": "../foo" }]
+  "include": [
+    "src/**/*.ts"
+  ]
 }

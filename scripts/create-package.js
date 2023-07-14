@@ -29,22 +29,6 @@ readline.question("What is the name of the new package? ", (packageName) => {
     JSON.stringify(packageJson, null, 2)
   );
 
-  const webpackConfig = `const path = require('path');
-const baseConfig = require('../../webpack.config.base.js');
-
-module.exports = {
-  ...baseConfig,
-  entry: {
-    index: path.resolve(__dirname, 'src/index.ts'),
-  },
-  output: {
-    ...baseConfig.output,
-    path: path.resolve(__dirname, 'dist', 'umd'),
-  },
-};`;
-
-  fs.writeFileSync(path.join(packagesDir, "webpack.config.js"), webpackConfig);
-
   // The "composite" option enables project composition in TypeScript. It tells TypeScript to generate certain files in the output directory (outDir) that can be used to speed up subsequent builds and to enable tools to do more powerful project-wide checks and refactorings.
   const tsConfigJson = {
     extends: "../../tsconfig.json",

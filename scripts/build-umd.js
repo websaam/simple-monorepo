@@ -1,17 +1,21 @@
 const fs = require("fs");
 const path = require("path");
-const execSync = require("child_process").execSync;
+const { build } = require('esbuild');
 
 const packagesDir = path.resolve(__dirname, "..", "packages");
-const packageDirs = fs.readdirSync(packagesDir);
+const directories = fs.readdirSync(packagesDir);
 
-packageDirs.forEach((dir) => {
-  const packagePath = path.resolve(packagesDir, dir);
-  const webpackConfigPath = path.resolve(packagePath, "webpack.config.js");
-  if (fs.existsSync(webpackConfigPath)) {
-    console.log(`Building UMD bundle for package ${dir}...`);
-    execSync("npx webpack", { cwd: packagePath, stdio: "inherit" });
+directories.forEach((dir) => {
+  const packageDir = path.join(packagesDir, dir);
+  if (fs.statSync(packageDir).isDirectory()) {
+    console.log(`Building UMD for ${dir}...`);
+
+    build({
+      entryPoints: [path.join(packageDir, 'src', 'index.ts')],
+      outfile: path.join(packageDir, 'dist', 'umd', 'index.js'),
+    }).catch((error) => {
+      console.error(error);
+      process.exit(1);
+    });
   }
 });
-
-console.log("UMD bundles built successfully.");

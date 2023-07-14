@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "foo": [
-        "./packages/foo/src/index"
-      ],
-      "bar": [
-        "./packages/bar/src/index"
-      ]
-    },
     "module": "commonjs",
     "target": "es5",
     "declaration": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "foo": [
+        "./packages/foo/src"
+      ],
+      "bar": [
+        "./packages/bar/src"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts"
@@ -20,10 +20,10 @@
   "files": [],
   "references": [
     {
-      "path": "./packages/bar"
+      "path": "./packages/foo"
     },
     {
-      "path": "./packages/foo"
+      "path": "./packages/bar"
     }
   ]
 }
